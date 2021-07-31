@@ -3,6 +3,7 @@
  */
 package ru.capralow.dt.mylyn.e1c;
 
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -16,6 +17,7 @@ import org.eclipse.mylyn.tasks.core.TaskRepository;
 import org.eclipse.mylyn.tasks.core.data.AbstractTaskDataHandler;
 import org.eclipse.mylyn.tasks.core.data.TaskData;
 import org.eclipse.mylyn.tasks.core.data.TaskDataCollector;
+import org.eclipse.mylyn.tasks.core.data.TaskMapper;
 import org.eclipse.mylyn.tasks.core.sync.ISynchronizationSession;
 
 import ru.capralow.dt.mylyn.internal.e1c.ConnectionManager;
@@ -102,8 +104,24 @@ public class E1cConnector
     @Override
     public boolean hasTaskChanged(TaskRepository repository, ITask task, TaskData data)
     {
-        // TODO Автоматически созданная заглушка метода
-        return false;
+        TaskMapper mapper = new E1cTaskMapper(data);
+
+        if (data.isPartial())
+        {
+            return mapper.hasChanges(task);
+        }
+
+        else
+        {
+            Date repositoryDate = mapper.getModificationDate();
+            Date localDate = task.getModificationDate();
+            if (repositoryDate != null && repositoryDate.equals(localDate))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 
     @Override

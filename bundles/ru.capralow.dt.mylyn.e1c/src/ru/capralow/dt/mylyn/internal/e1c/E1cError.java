@@ -4,6 +4,7 @@
 package ru.capralow.dt.mylyn.internal.e1c;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Aleksandr Kapralov
@@ -12,5 +13,29 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class E1cError
 {
+
+    @JsonProperty("Ref_Key")
+    public String refKey;
+
+    @JsonProperty("DataVersion")
+    public String dataVersion;
+
+    @JsonProperty("DeletionMark")
+    public boolean deletionMark;
+
+    @JsonProperty("Owner_Key")
+    public String ownerKey;
+
+    @JsonProperty("Code")
+    public String code;
+
+    @JsonProperty("Description")
+    public String description;
+
+    @JsonProperty("Predefined")
+    public boolean predefined;
+
+    @JsonProperty("PredefinedDataName")
+    public String predefinedDataName;
 
 }
