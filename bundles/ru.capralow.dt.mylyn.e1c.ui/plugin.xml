@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="ru.capralow.dt.mylyn.e1c"
+         name="%repository.name"
+         point="org.eclipse.mylyn.tasks.ui.repositories">
+         <connectorUi
+            class="ru.capralow.dt.mylyn.internal.e1c.ui.E1cConnectorUi"
+            id="ru.capralow.dt.mylyn.e1c.ui"
+            name="%connector.name"/>
+   </extension>
+
+</plugin>
