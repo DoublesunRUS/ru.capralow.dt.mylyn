@@ -13,7 +13,8 @@ Bundle-Activator: ru.capralow.dt.mylyn.internal.e1c.ui.E1cUiPlugin
 Require-Bundle: ru.capralow.dt.mylyn.e1c,
  org.eclipse.core.runtime;bundle-version="[3.20.0,4.0.0)",
  org.eclipse.ui;bundle-version="[3.119.0,4.0.0)",
+ org.eclipse.ui.forms;bundle-version="[3.11.0,4.0.0)",
+ org.eclipse.mylyn.commons.ui;bundle-version="[3.25.2,4.0.0)",
  org.eclipse.mylyn.tasks.core;bundle-version="[3.25.2,4.0.0)",
- org.eclipse.mylyn.tasks.ui;bundle-version="[3.25.2,4.0.0)",
- org.eclipse.ui.forms;bundle-version="[3.11.0,4.0.0)"
+ org.eclipse.mylyn.tasks.ui;bundle-version="[3.25.2,4.0.0)"
 Export-Package: ru.capralow.dt.mylyn.internal.e1c.ui;x-internal:=true

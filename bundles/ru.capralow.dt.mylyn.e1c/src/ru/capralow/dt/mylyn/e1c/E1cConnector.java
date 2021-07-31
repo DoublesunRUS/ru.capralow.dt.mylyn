@@ -3,18 +3,27 @@
  */
 package ru.capralow.dt.mylyn.e1c;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.mylyn.tasks.core.AbstractRepositoryConnector;
 import org.eclipse.mylyn.tasks.core.IRepositoryQuery;
 import org.eclipse.mylyn.tasks.core.ITask;
 import org.eclipse.mylyn.tasks.core.TaskRepository;
+import org.eclipse.mylyn.tasks.core.data.AbstractTaskDataHandler;
 import org.eclipse.mylyn.tasks.core.data.TaskData;
 import org.eclipse.mylyn.tasks.core.data.TaskDataCollector;
 import org.eclipse.mylyn.tasks.core.sync.ISynchronizationSession;
 
 import ru.capralow.dt.mylyn.internal.e1c.ConnectionManager;
+import ru.capralow.dt.mylyn.internal.e1c.E1cConnection;
+import ru.capralow.dt.mylyn.internal.e1c.E1cError;
+import ru.capralow.dt.mylyn.internal.e1c.E1cPlugin;
+import ru.capralow.dt.mylyn.internal.e1c.E1cTaskDataHandler;
+import ru.capralow.dt.mylyn.internal.e1c.E1cTaskMapper;
 
 /**
  * @author Aleksandr Kapralov
@@ -27,6 +36,8 @@ public class E1cConnector
     public static final String CONNECTOR_KIND = "e1c.connector"; //$NON-NLS-1$
 
     private static final String LABEL = "1C Connector"; //$NON-NLS-1$
+
+    private E1cTaskDataHandler handler = new E1cTaskDataHandler();
 
     @Override
     public boolean canCreateNewTask(TaskRepository repository)
@@ -62,8 +73,16 @@ public class E1cConnector
     @Override
     public TaskData getTaskData(TaskRepository repository, String taskId, IProgressMonitor monitor) throws CoreException
     {
-        // TODO Автоматически созданная заглушка метода
-        return null;
+        try
+        {
+            monitor.beginTask("Task Download", IProgressMonitor.UNKNOWN);
+            return null;
+//            return handler.downloadTaskData(repository, GitlabConnector.getTicketId(id));
+        }
+        finally
+        {
+            monitor.done();
+        }
     }
 
     @Override
@@ -91,26 +110,62 @@ public class E1cConnector
     public IStatus performQuery(TaskRepository repository, IRepositoryQuery query, TaskDataCollector collector,
         ISynchronizationSession session, IProgressMonitor monitor)
     {
-        // TODO Автоматически созданная заглушка метода
-        return null;
+        try
+        {
+            monitor.beginTask("Tasks querying", IProgressMonitor.UNKNOWN);
+            E1cConnection connection = ConnectionManager.get(repository);
+            List<E1cError> errors = connection.getErrors();
+
+            for (E1cError i : errors)
+            {
+                collector.accept(handler.createTaskDataFromE1cError(i, repository));
+            }
+
+            return Status.OK_STATUS;
+        }
+        catch (Exception e)
+        {
+            return E1cPlugin.createErrorStatus(e.getMessage(), e);
+        }
+        finally
+        {
+            monitor.done();
+        }
     }
 
     @Override
     public void updateRepositoryConfiguration(TaskRepository repository, IProgressMonitor monitor) throws CoreException
     {
-        // TODO Автоматически созданная заглушка метода
-
+        try
+        {
+            monitor.beginTask("Updating repository configuration", IProgressMonitor.UNKNOWN);
+            ConnectionManager.get(repository, true);
+        }
+        catch (Exception e)
+        {
+            throw new CoreException(E1cPlugin.createErrorStatus(e.getMessage(), e));
+        }
+        finally
+        {
+            monitor.done();
+        }
     }
 
     @Override
     public void updateTaskFromTaskData(TaskRepository repository, ITask task, TaskData data)
     {
-        // TODO Автоматически созданная заглушка метода
-
+        E1cTaskMapper mapper = new E1cTaskMapper(data);
+        mapper.applyTo(task);
     }
 
-    public static void validate(TaskRepository taskRepo) throws CoreException
+    @Override
+    public AbstractTaskDataHandler getTaskDataHandler()
     {
-        ConnectionManager.validate(taskRepo);
+        return handler;
+    }
+
+    public static void validate(TaskRepository repository) throws CoreException
+    {
+        ConnectionManager.validate(repository);
     }
 }

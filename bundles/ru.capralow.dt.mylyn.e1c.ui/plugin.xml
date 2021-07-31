@@ -11,4 +11,10 @@
             name="%connector.name"/>
    </extension>
 
+   <extension point="org.eclipse.mylyn.tasks.ui.editors">
+         <pageFactory
+            class="ru.capralow.dt.mylyn.internal.e1c.ui.E1cEditorPageFactory"
+            id="ru.capralow.dt.mylyn.e1c.ui.pageFactory">
+      </pageFactory>
+   </extension>
 </plugin>

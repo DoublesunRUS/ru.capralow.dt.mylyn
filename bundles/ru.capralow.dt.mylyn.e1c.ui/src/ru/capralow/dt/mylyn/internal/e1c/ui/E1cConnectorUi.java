@@ -9,6 +9,8 @@ import org.eclipse.mylyn.tasks.core.ITaskMapping;
 import org.eclipse.mylyn.tasks.core.TaskRepository;
 import org.eclipse.mylyn.tasks.ui.AbstractRepositoryConnectorUi;
 import org.eclipse.mylyn.tasks.ui.wizards.ITaskRepositoryPage;
+import org.eclipse.mylyn.tasks.ui.wizards.NewTaskWizard;
+import org.eclipse.mylyn.tasks.ui.wizards.RepositoryQueryWizard;
 
 import ru.capralow.dt.mylyn.e1c.E1cConnector;
 
@@ -35,15 +37,15 @@ public class E1cConnectorUi
     @Override
     public IWizard getQueryWizard(TaskRepository repository, IRepositoryQuery query)
     {
-        // TODO Автоматически созданная заглушка метода
-        return null;
+        RepositoryQueryWizard wizard = new RepositoryQueryWizard(repository);
+        wizard.addPage(new E1cQueryPage("New Page", repository, query));
+        return wizard;
     }
 
     @Override
-    public IWizard getNewTaskWizard(TaskRepository repository, ITaskMapping selection)
+    public IWizard getNewTaskWizard(TaskRepository repository, ITaskMapping mapping)
     {
-        // TODO Автоматически созданная заглушка метода
-        return null;
+        return new NewTaskWizard(repository, mapping);
     }
 
     @Override
