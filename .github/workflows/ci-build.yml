@@ -34,7 +34,7 @@ jobs:
         df -h
 
     - name: Cache maven repo
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       if: github.event_name == 'push' || github.event_name == 'pull_request'
       with:
         path: ~/.m2/repository/p2/osgi/bundle/com.?1c.*
