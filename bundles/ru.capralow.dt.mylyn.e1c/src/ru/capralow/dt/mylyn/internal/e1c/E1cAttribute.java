@@ -17,6 +17,7 @@ public enum E1cAttribute
 {
     CODE("Код", TaskAttribute.TASK_KEY, TaskAttribute.TYPE_SHORT_TEXT, E1cFlag.READ_ONLY),
     DESCRIPTION("Наименование", TaskAttribute.SUMMARY, TaskAttribute.TYPE_SHORT_RICH_TEXT),
+    PROJECT("Проект", TaskAttribute.PRODUCT, TaskAttribute.TYPE_SHORT_TEXT, E1cFlag.READ_ONLY, E1cFlag.ATTRIBUTE),
     CREATED("Дата cоздания", TaskAttribute.DATE_CREATION, TaskAttribute.TYPE_DATETIME, E1cFlag.READ_ONLY),
     UPDATED("Дата последнего изменения", TaskAttribute.DATE_MODIFICATION, TaskAttribute.TYPE_DATETIME,
         E1cFlag.READ_ONLY),

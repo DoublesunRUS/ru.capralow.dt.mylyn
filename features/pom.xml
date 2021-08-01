@@ -7,13 +7,21 @@
 
 	<parent>
 		<groupId>ru.capralow.dt.mylyn</groupId>
-		<artifactId>targets</artifactId>
+		<artifactId>parent</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>ru.capralow.dt.mylyn</groupId>
-	<artifactId>default</artifactId>
-	<packaging>eclipse-target-definition</packaging>
+	<artifactId>features</artifactId>
+	<packaging>pom</packaging>
 
-	<name>Target Platform</name>
+	<name>Features</name>
+
+	<properties>
+		<sonar.skip>true</sonar.skip>
+	</properties>
+
+	<modules>
+		<module>ru.capralow.dt.mylyn.feature</module>
+	</modules>
+
 </project>

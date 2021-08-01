@@ -87,6 +87,7 @@ public class E1cTaskDataHandler
         TaskAttribute root = data.getRoot();
         root.getAttribute(E1cAttribute.CODE.getTaskKey()).setValue(error.code);
         root.getAttribute(E1cAttribute.DESCRIPTION.getTaskKey()).setValue(error.description);
+        root.getAttribute(E1cAttribute.PROJECT.getTaskKey()).setValue(error.project.description);
         root.getAttribute(E1cAttribute.CREATED.getTaskKey()).setValue(String.valueOf(error.createdAt.getTime()));
         root.getAttribute(E1cAttribute.UPDATED.getTaskKey()).setValue(String.valueOf(error.modifiedAt.getTime()));
 
@@ -103,6 +104,7 @@ public class E1cTaskDataHandler
     {
         createAttribute(data, E1cAttribute.CODE);
         createAttribute(data, E1cAttribute.DESCRIPTION);
+        createAttribute(data, E1cAttribute.PROJECT);
         createAttribute(data, E1cAttribute.CREATED);
         createAttribute(data, E1cAttribute.UPDATED);
         createAttribute(data, E1cAttribute.COMPLETED);

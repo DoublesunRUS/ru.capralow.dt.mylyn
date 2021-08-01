@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="ru.capralow.dt.mylyn.feature">
+      <category name="ru.capralow.dt.category.public"/>
+   </feature>
+   <category-def name="ru.capralow.dt.category.public" label="Плагины для EDT"/>
+   <repository-reference location="http://capralow.ru/edt/mylyn/latest/" enabled="true" />
+</site>

@@ -3,7 +3,6 @@
  */
 package ru.capralow.dt.mylyn.e1c;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -23,6 +22,6 @@ public interface IE1cConnection
 
     E1cError getError(String refKey) throws CoreException;
 
-    void update() throws IOException;
+    void update() throws CoreException;
 
 }

@@ -3,13 +3,11 @@
  */
 package ru.capralow.dt.mylyn.e1c;
 
-import java.util.Date;
-
 /**
  * @author Aleksandr Kapralov
  *
  */
-public class E1cError
+public class E1cUser
 {
 
     public String refKey;
@@ -17,13 +15,5 @@ public class E1cError
     public String code;
 
     public String description;
-
-    public E1cProject project;
-
-    public Date createdAt;
-
-    public Date modifiedAt;
-
-    public Date completedAt;
 
 }
