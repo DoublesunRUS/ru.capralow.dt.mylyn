@@ -21,7 +21,7 @@ public class E1cEditorPage
     {
         super(editor, connectorKind);
         setNeedsPrivateSection(false);
-        setNeedsSubmitButton(true);
+        setNeedsSubmitButton(false);
         setNeedsAddToCategory(false);
     }
 
