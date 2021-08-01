@@ -20,6 +20,7 @@ public class E1cEditorPage
     public E1cEditorPage(TaskEditor editor, String connectorKind)
     {
         super(editor, connectorKind);
+
         setNeedsPrivateSection(false);
         setNeedsSubmitButton(false);
         setNeedsAddToCategory(false);
@@ -30,7 +31,6 @@ public class E1cEditorPage
     {
         Set<TaskEditorPartDescriptor> descriptors = super.createPartDescriptors();
 
-        // remove unnecessary default editor parts
         for (Iterator<TaskEditorPartDescriptor> it = descriptors.iterator(); it.hasNext();)
         {
             TaskEditorPartDescriptor descriptor = it.next();
@@ -39,6 +39,7 @@ public class E1cEditorPage
                 it.remove();
             }
         }
+
         return descriptors;
     }
 

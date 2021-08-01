@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2021, Aleksandr Kapralov
  */
-package ru.capralow.dt.mylyn.internal.e1c;
+package ru.capralow.dt.mylyn.internal.e1c.odata.modeling;
 
 import java.io.IOException;
 import java.net.URI;
@@ -9,43 +9,49 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.util.Arrays;
-import java.util.Base64;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpException;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.mylyn.commons.net.AuthenticationType;
-import org.eclipse.mylyn.tasks.core.TaskRepository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ru.capralow.dt.mylyn.internal.e1c.model.E1cError;
+import ru.capralow.dt.mylyn.e1c.E1cError;
+import ru.capralow.dt.mylyn.e1c.IE1cConnection;
+import ru.capralow.dt.mylyn.internal.e1c.E1cAttributeMapper;
+import ru.capralow.dt.mylyn.internal.e1c.E1cPlugin;
 
 /**
  * @author Aleksandr Kapralov
  *
  */
-public class E1cConnection
+public class ModelingConnection
+    implements IE1cConnection
 {
 
     private static Pattern URLPattern = Pattern.compile("((?:http|https):\\/\\/(?:[^\\\\\\/]*))\\/((?:[^\\\\\\/]*))$"); //$NON-NLS-1$
 
-    public final E1cAttributeMapper mapper;
-
     private String url;
     private String authHeader;
+    private E1cAttributeMapper mapper;
 
-    public E1cConnection(String url, String authHeader, E1cAttributeMapper mapper)
+    public ModelingConnection(String url, String authHeader, E1cAttributeMapper mapper)
     {
         this.url = url;
         this.authHeader = authHeader;
         this.mapper = mapper;
     }
 
+    @Override
+    public E1cAttributeMapper getMapper()
+    {
+        return mapper;
+    }
+
+    @Override
     public List<E1cError> getErrors() throws CoreException
     {
         try
@@ -67,8 +73,16 @@ public class E1cConnection
 
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonTree = objectMapper.readTree(response.body());
-            E1cError[] odata = objectMapper.readValue(jsonTree.get("value").traverse(), E1cError[].class); //$NON-NLS-1$
-            return Arrays.asList(odata);
+            ModelingErrorOData[] odata =
+                objectMapper.readValue(jsonTree.get("value").traverse(), ModelingErrorOData[].class); //$NON-NLS-1$
+
+            List<E1cError> result = new ArrayList<>();
+            for (ModelingErrorOData odataElement : odata)
+            {
+                result.add(createErrorFromOData(odataElement));
+            }
+
+            return result;
 
         }
         catch (Exception e)
@@ -77,6 +91,7 @@ public class E1cConnection
         }
     }
 
+    @Override
     public E1cError getError(String refKey) throws CoreException
     {
         try
@@ -100,8 +115,9 @@ public class E1cConnection
                 throw new HttpException(errorMessage);
             }
 
-            E1cError odata = objectMapper.readValue(response.body(), E1cError.class);
-            return odata;
+            ModelingErrorOData odata = objectMapper.readValue(response.body(), ModelingErrorOData.class);
+
+            return createErrorFromOData(odata);
 
         }
         catch (Exception e)
@@ -110,6 +126,7 @@ public class E1cConnection
         }
     }
 
+    @Override
     public void update() throws IOException
     {
 //        ArrayList<GitlabProjectMember> memberList = new ArrayList<GitlabProjectMember>();
@@ -127,43 +144,37 @@ public class E1cConnection
 //        members = Collections.unmodifiableList(memberList);
     }
 
-    public static E1cConnection validate(TaskRepository repository) throws CoreException
+    private E1cError createErrorFromOData(ModelingErrorOData odata)
     {
-        try
+        E1cError result = new E1cError();
+
+        result.refKey = odata.refKey;
+        result.code = odata.code;
+        result.description = odata.description;
+        result.createdAt = odata.createdAt;
+        result.modifiedAt = odata.createdAt;
+
+        if (odata.protocol.length != 0)
         {
-            Matcher matcher = URLPattern.matcher(repository.getUrl());
-            if (!matcher.find())
-            {
-                throw new NullPointerException("Invalid Project-URL!");
-            }
-
-            String username = repository.getCredentials(AuthenticationType.REPOSITORY).getUserName();
-            String password = repository.getCredentials(AuthenticationType.REPOSITORY).getPassword();
-            String authHeader = Base64.getEncoder().encodeToString((username + ":" + password).getBytes()); //$NON-NLS-1$
-
-            String requestString = "/odata/standard.odata/$metadata"; //$NON-NLS-1$
-
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(repository.getUrl() + requestString))
-                .header("Authorization", "Basic " + authHeader) //$NON-NLS-1$ //$NON-NLS-2$
-                .build();
-            HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-
-            if (response.statusCode() != 200)
-            {
-                throw new HttpException(
-                    "Исключительная ситуация при получении списка доступных метаданных: " + response.statusCode());
-            }
-
-            E1cConnection connection =
-                new E1cConnection(repository.getUrl(), authHeader, new E1cAttributeMapper(repository));
-            return connection;
+            result.modifiedAt = odata.protocol[0].date;
         }
-        catch (Exception e)
+
+        boolean errorShouldBeClosed = false;
+
+        if (odata.closed || odata.status.equals("Закрыта"))
         {
-            throw new CoreException(E1cPlugin.createErrorStatus(e.getMessage(), e));
+            result.completedAt = odata.closedAt;
         }
+        else if (odata.withdrawn || odata.status.equals("Отозвана"))
+        {
+            result.completedAt = odata.withdrawnAt;
+        }
+        else if (odata.fixed || odata.status.equals("ПроверенаИсправлена") && !errorShouldBeClosed)
+        {
+            result.completedAt = odata.fixedAt;
+        }
+
+        return result;
     }
 
 }

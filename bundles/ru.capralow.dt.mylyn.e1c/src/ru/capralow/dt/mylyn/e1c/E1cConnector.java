@@ -21,11 +21,9 @@ import org.eclipse.mylyn.tasks.core.data.TaskMapper;
 import org.eclipse.mylyn.tasks.core.sync.ISynchronizationSession;
 
 import ru.capralow.dt.mylyn.internal.e1c.ConnectionManager;
-import ru.capralow.dt.mylyn.internal.e1c.E1cConnection;
 import ru.capralow.dt.mylyn.internal.e1c.E1cPlugin;
 import ru.capralow.dt.mylyn.internal.e1c.E1cTaskDataHandler;
 import ru.capralow.dt.mylyn.internal.e1c.E1cTaskMapper;
-import ru.capralow.dt.mylyn.internal.e1c.model.E1cError;
 
 /**
  * @author Aleksandr Kapralov
@@ -130,7 +128,7 @@ public class E1cConnector
         try
         {
             monitor.beginTask("Tasks querying", IProgressMonitor.UNKNOWN);
-            E1cConnection connection = ConnectionManager.get(repository);
+            IE1cConnection connection = ConnectionManager.get(repository);
             List<E1cError> errors = connection.getErrors();
 
             for (E1cError i : errors)
@@ -184,11 +182,5 @@ public class E1cConnector
     public static void validate(TaskRepository repository) throws CoreException
     {
         ConnectionManager.validate(repository);
-    }
-
-    public static String getRefKey(String taskId)
-    {
-        return String.join("-", taskId.substring(0, 8), taskId.substring(8, 12), taskId.substring(12, 16), //$NON-NLS-1$
-            taskId.substring(16, 20), taskId.substring(20));
     }
 }

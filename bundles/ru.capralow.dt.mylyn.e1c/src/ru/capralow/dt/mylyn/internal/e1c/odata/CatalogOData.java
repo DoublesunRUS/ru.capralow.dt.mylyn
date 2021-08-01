@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2021, Aleksandr Kapralov
  */
-package ru.capralow.dt.mylyn.internal.e1c.model;
+package ru.capralow.dt.mylyn.internal.e1c.odata;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class E1cCatalog
+public abstract class CatalogOData
 {
 
     @JsonProperty("Ref_Key")

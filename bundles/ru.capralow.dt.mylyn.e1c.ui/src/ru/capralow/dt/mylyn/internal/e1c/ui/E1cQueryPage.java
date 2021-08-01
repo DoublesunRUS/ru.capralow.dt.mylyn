@@ -34,9 +34,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-import ru.capralow.dt.mylyn.internal.e1c.ConnectionManager;
-import ru.capralow.dt.mylyn.internal.e1c.E1cConnection;
-
 /**
  * @author Aleksandr Kapralov
  *
@@ -129,17 +126,17 @@ public class E1cQueryPage
         Label milestonesLabel = new Label(optionsArea, SWT.NONE);
         milestonesLabel.setText("Query milestone");
 
-        milestoneCombo = new Combo(optionsArea, SWT.DROP_DOWN | SWT.READ_ONLY);
-        GridDataFactory.fillDefaults().grab(true, false).applyTo(milestoneCombo);
-        E1cConnection connection = ConnectionManager.getSafe(getTaskRepository());
-        if (connection != null)
-        {
+//        milestoneCombo = new Combo(optionsArea, SWT.DROP_DOWN | SWT.READ_ONLY);
+//        GridDataFactory.fillDefaults().grab(true, false).applyTo(milestoneCombo);
+//        IE1cConnection connection = ConnectionManager.getSafe(getTaskRepository());
+//        if (connection != null)
+//        {
 //            milestoneCombo.add("");
 //            for (GitlabMilestone s : connection.getMilestones())
 //            {
 //                milestoneCombo.add(s.getTitle());
 //            }
-        }
+//        }
 
         Label assigneeLabel = new Label(optionsArea, SWT.NONE);
         assigneeLabel.setText("Query asignee");

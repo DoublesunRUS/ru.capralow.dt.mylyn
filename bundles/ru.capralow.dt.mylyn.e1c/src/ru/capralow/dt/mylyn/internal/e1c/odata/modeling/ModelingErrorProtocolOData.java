@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2021, Aleksandr Kapralov
  */
-package ru.capralow.dt.mylyn.internal.e1c.model;
+package ru.capralow.dt.mylyn.internal.e1c.odata.modeling;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class E1cErrorProtocol
+public class ModelingErrorProtocolOData
 
 {
 

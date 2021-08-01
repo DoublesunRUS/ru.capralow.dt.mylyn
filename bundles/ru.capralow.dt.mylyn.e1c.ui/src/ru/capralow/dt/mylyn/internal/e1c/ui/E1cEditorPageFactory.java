@@ -46,6 +46,12 @@ public class E1cEditorPageFactory
     }
 
     @Override
+    public int getPriority()
+    {
+        return 0;
+    }
+
+    @Override
     public Image getPageImage()
     {
         return CommonImages.getImage(TasksUiImages.TASK);

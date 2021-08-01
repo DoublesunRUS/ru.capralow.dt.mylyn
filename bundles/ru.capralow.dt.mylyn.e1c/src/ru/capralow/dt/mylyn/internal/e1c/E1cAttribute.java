@@ -19,7 +19,9 @@ public enum E1cAttribute
     DESCRIPTION("Наименование", TaskAttribute.SUMMARY, TaskAttribute.TYPE_SHORT_RICH_TEXT),
     CREATED("Дата cоздания", TaskAttribute.DATE_CREATION, TaskAttribute.TYPE_DATETIME, E1cFlag.READ_ONLY),
     UPDATED("Дата последнего изменения", TaskAttribute.DATE_MODIFICATION, TaskAttribute.TYPE_DATETIME,
-        E1cFlag.READ_ONLY);
+        E1cFlag.READ_ONLY),
+    COMPLETED("Дата закрытия", TaskAttribute.DATE_COMPLETION, TaskAttribute.TYPE_DATETIME, E1cFlag.READ_ONLY,
+        E1cFlag.ATTRIBUTE);
 
     private final String prettyName;
 
