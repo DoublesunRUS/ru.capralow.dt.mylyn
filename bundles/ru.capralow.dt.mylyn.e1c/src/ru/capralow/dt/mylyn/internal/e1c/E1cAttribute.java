@@ -15,8 +15,11 @@ import org.eclipse.mylyn.tasks.core.data.TaskAttribute;
  */
 public enum E1cAttribute
 {
-    IID("Код", TaskAttribute.TASK_KEY, TaskAttribute.TYPE_SHORT_TEXT, E1cFlag.READ_ONLY),
-    TITLE("Наименование", TaskAttribute.SUMMARY, TaskAttribute.TYPE_SHORT_RICH_TEXT);
+    CODE("Код", TaskAttribute.TASK_KEY, TaskAttribute.TYPE_SHORT_TEXT, E1cFlag.READ_ONLY),
+    DESCRIPTION("Наименование", TaskAttribute.SUMMARY, TaskAttribute.TYPE_SHORT_RICH_TEXT),
+    CREATED("Дата cоздания", TaskAttribute.DATE_CREATION, TaskAttribute.TYPE_DATETIME, E1cFlag.READ_ONLY),
+    UPDATED("Дата последнего изменения", TaskAttribute.DATE_MODIFICATION, TaskAttribute.TYPE_DATETIME,
+        E1cFlag.READ_ONLY);
 
     private final String prettyName;
 
@@ -28,7 +31,7 @@ public enum E1cAttribute
 
     public String getKind()
     {
-        return null;
+        return flags.contains(E1cFlag.ATTRIBUTE) ? TaskAttribute.KIND_DEFAULT : null;
     }
 
     public boolean isReadOnly()

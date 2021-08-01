@@ -9,5 +9,6 @@ package ru.capralow.dt.mylyn.internal.e1c;
  */
 public enum E1cFlag
 {
+    ATTRIBUTE,
     READ_ONLY
 }

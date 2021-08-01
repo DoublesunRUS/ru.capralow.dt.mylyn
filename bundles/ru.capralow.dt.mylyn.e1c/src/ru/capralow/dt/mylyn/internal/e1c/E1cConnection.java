@@ -20,7 +20,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.mylyn.commons.net.AuthenticationType;
 import org.eclipse.mylyn.tasks.core.TaskRepository;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ru.capralow.dt.mylyn.internal.e1c.model.E1cError;
 
 /**
  * @author Aleksandr Kapralov
@@ -63,8 +66,42 @@ public class E1cConnection
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
-            E1cOData odata = objectMapper.readValue(response.body(), E1cOData.class);
-            return Arrays.asList(odata.value);
+            JsonNode jsonTree = objectMapper.readTree(response.body());
+            E1cError[] odata = objectMapper.readValue(jsonTree.get("value").traverse(), E1cError[].class); //$NON-NLS-1$
+            return Arrays.asList(odata);
+
+        }
+        catch (Exception e)
+        {
+            throw new CoreException(E1cPlugin.createErrorStatus(e.getMessage(), e));
+        }
+    }
+
+    public E1cError getError(String refKey) throws CoreException
+    {
+        try
+        {
+            String requestString = "/odata/standard.odata/Catalog_Ошибки(guid'" + refKey + "')?$format=json"; //$NON-NLS-1$ //$NON-NLS-2$
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url + requestString))
+                .header("Authorization", "Basic " + authHeader) //$NON-NLS-1$ //$NON-NLS-2$
+                .build();
+            HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            if (response.statusCode() != 200)
+            {
+                JsonNode jsonTree = objectMapper.readTree(response.body());
+                String errorMessage = jsonTree.get("odata.error").get("message").get("value").asText(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+                throw new HttpException(errorMessage);
+            }
+
+            E1cError odata = objectMapper.readValue(response.body(), E1cError.class);
+            return odata;
 
         }
         catch (Exception e)
