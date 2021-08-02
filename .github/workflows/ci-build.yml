@@ -61,7 +61,7 @@ jobs:
     - name: Upload repo
       uses: actions/upload-artifact@v2
       with:
-        name: dt-maven-repository
+        name: dt-mylyn-repository
         path: repositories/ru.capralow.dt.mylyn.repository/target/repository/
         
     - name: Upload JaCoCo exec data
@@ -87,5 +87,5 @@ jobs:
         server: capralow.ru
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: maven/0.1.0/
+        server-dir: mylyn/0.1.0/
         local-dir: repositories/ru.capralow.dt.mylyn.repository/target/repository/

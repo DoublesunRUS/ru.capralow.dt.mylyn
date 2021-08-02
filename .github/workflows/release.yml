@@ -105,5 +105,5 @@ jobs:
         server: capralow.ru
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        server-dir: maven/latest/
+        server-dir: mylyn/latest/
         local-dir: repositories/ru.capralow.dt.mylyn.repository/target/repository/
