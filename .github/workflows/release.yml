@@ -59,7 +59,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: repo
-        path: repositories/ru.capralow.dt.maven.repository/target/repository/
+        path: repositories/ru.capralow.dt.mylyn.repository/target/repository/
         
     - name: Upload JaCoCo exec data
       uses: actions/upload-artifact@v2
@@ -94,7 +94,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./repositories/ru.capralow.dt.maven.repository/target/ru.capralow.dt.maven.repository.zip
+        asset_path: ./repositories/ru.capralow.dt.mylyn.repository/target/ru.capralow.dt.mylyn.repository.zip
         asset_name: repo.zip
         asset_content_type: application/zip
 
@@ -106,4 +106,4 @@ jobs:
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
         server-dir: maven/latest/
-        local-dir: repositories/ru.capralow.dt.maven.repository/target/repository/
+        local-dir: repositories/ru.capralow.dt.mylyn.repository/target/repository/
