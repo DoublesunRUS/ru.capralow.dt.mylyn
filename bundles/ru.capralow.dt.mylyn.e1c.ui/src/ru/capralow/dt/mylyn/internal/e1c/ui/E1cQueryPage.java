@@ -27,7 +27,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -48,7 +47,7 @@ public class E1cQueryPage
     private Text titleText;
     private Text assigneeText;
     private Text newLabel;
-    private Combo milestoneCombo;
+//    private Combo milestoneCombo;
     private TableViewer labelsViewer;
 
     private SelectionListener completeListener = new SelectionAdapter()
@@ -262,7 +261,7 @@ public class E1cQueryPage
 
         titleText.setText(query.getSummary());
         assigneeText.setText(query.getAttribute("assignee"));
-        milestoneCombo.setText(query.getAttribute("milestone"));
+//        milestoneCombo.setText(query.getAttribute("milestone"));
 
         openButton.setSelection(Boolean.parseBoolean(query.getAttribute("opened")));
         closedButton.setSelection(Boolean.parseBoolean(query.getAttribute("closed")));
@@ -297,7 +296,7 @@ public class E1cQueryPage
     {
         query.setSummary(titleText.getText());
         query.setAttribute("assignee", assigneeText.getText());
-        query.setAttribute("milestone", milestoneCombo.getText());
+//        query.setAttribute("milestone", milestoneCombo.getText());
         query.setAttribute("opened", "" + openButton.getSelection());
         query.setAttribute("closed", "" + closedButton.getSelection());
 
